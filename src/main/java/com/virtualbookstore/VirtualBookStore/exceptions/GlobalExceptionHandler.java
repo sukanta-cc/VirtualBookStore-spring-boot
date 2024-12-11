@@ -21,7 +21,6 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleSecurityException(Exception exception) {
         ProblemDetail errorDetail = null;
 
-        // TODO send this stack trace to an observability tool
         log.error(exception.getMessage(), errorDetail, "<<-- exception.getMessage()");
 
         if (exception instanceof BadCredentialsException) {
