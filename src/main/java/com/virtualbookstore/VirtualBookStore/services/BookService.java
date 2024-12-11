@@ -5,17 +5,16 @@ import com.virtualbookstore.VirtualBookStore.models.Book;
 import com.virtualbookstore.VirtualBookStore.models.User;
 import com.virtualbookstore.VirtualBookStore.repositories.BookRepositories;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-@Slf4j
 @Service
+@Slf4j
 public class BookService {
 
     private final BookRepositories bookRepositories;
@@ -28,7 +27,8 @@ public class BookService {
         try {
             ApiResponse<Book> response = new ApiResponse<>();
 
-            // Check if the same titled book is already existed by this name or not by the same author.
+            // Check if the same titled book is already existed by this name or not by the
+            // same author.
             Book existingBook = bookRepositories.findByTitle(book.getTitle()).orElse(null);
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             User currentUser = (User) auth.getPrincipal();
@@ -73,8 +73,6 @@ public class BookService {
                 allBooks = bookRepositories.findAllByCreator(currentUser.getId()).orElse(new ArrayList<>());
             }
 
-
-
             response.setError(false);
             response.setCode("ALL_BOOKS_FETCHED");
             response.setMessage("All books fetched successfully");
@@ -84,5 +82,25 @@ public class BookService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public ApiResponse<Book> getBookById(String bookId) {
+        try {
+            ApiResponse<Book> apiResponse = new ApiResponse<>();
+
+            Book book = bookRepositories.findById(bookId).orElse(null);
+
+            log.info(book.toString(), "<<-- book data");
+
+            apiResponse.setCode("BOOK_FETCHED");
+            apiResponse.setMessage("Book fetched successfully");
+            apiResponse.setError(false);
+            apiResponse.setData(book);
+
+            return apiResponse;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
