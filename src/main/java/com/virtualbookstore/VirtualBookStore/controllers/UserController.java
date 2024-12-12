@@ -1,10 +1,7 @@
 package com.virtualbookstore.VirtualBookStore.controllers;
 
-import com.virtualbookstore.VirtualBookStore.Dtos.user.LoginDto;
-import com.virtualbookstore.VirtualBookStore.Dtos.user.RegisterDto;
-import com.virtualbookstore.VirtualBookStore.config.ApiResponse;
-import com.virtualbookstore.VirtualBookStore.models.User;
-import com.virtualbookstore.VirtualBookStore.services.UserService;
+import java.util.Objects;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
+import com.virtualbookstore.VirtualBookStore.Dtos.user.LoginDto;
+import com.virtualbookstore.VirtualBookStore.Dtos.user.RegisterDto;
+import com.virtualbookstore.VirtualBookStore.config.ApiResponse;
+import com.virtualbookstore.VirtualBookStore.models.User;
+import com.virtualbookstore.VirtualBookStore.services.UserService;
 
 @RestController
 @RequestMapping("/api/auth")
