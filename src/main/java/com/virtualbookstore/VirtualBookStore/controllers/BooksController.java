@@ -1,15 +1,22 @@
 package com.virtualbookstore.VirtualBookStore.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.virtualbookstore.VirtualBookStore.Dtos.Book.UpdateBookDto;
 import com.virtualbookstore.VirtualBookStore.config.ApiResponse;
 import com.virtualbookstore.VirtualBookStore.models.Book;
 import com.virtualbookstore.VirtualBookStore.services.BookService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
-@RequestMapping(value = "/api/books", produces = "application/json")
+@RequestMapping(value = "/api/books", produces = "application/json", consumes = "application/json")
 public class BooksController {
 
     private final BookService bookService;
@@ -57,6 +64,14 @@ public class BooksController {
     }
 
     // Update a book
+
+    @PutMapping("/{bookId}")
+    public ResponseEntity<ApiResponse<Book>> putMethodName(
+            @PathVariable String bookId,
+            @RequestBody UpdateBookDto updateBookDto) {
+
+        return ResponseEntity.ok().build();
+    }
 
     // Delete book from server
 

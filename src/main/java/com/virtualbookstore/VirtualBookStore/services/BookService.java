@@ -1,17 +1,19 @@
 package com.virtualbookstore.VirtualBookStore.services;
 
-import com.virtualbookstore.VirtualBookStore.config.ApiResponse;
-import com.virtualbookstore.VirtualBookStore.models.Book;
-import com.virtualbookstore.VirtualBookStore.models.User;
-import com.virtualbookstore.VirtualBookStore.repositories.BookRepositories;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import com.virtualbookstore.VirtualBookStore.Dtos.Book.UpdateBookDto;
+import com.virtualbookstore.VirtualBookStore.config.ApiResponse;
+import com.virtualbookstore.VirtualBookStore.models.Book;
+import com.virtualbookstore.VirtualBookStore.models.User;
+import com.virtualbookstore.VirtualBookStore.repositories.BookRepositories;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -102,5 +104,32 @@ public class BookService {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public ApiResponse<Book> updateBookByBookId(String bookId, UpdateBookDto updateBookDto) {
+        ApiResponse<Book> apiResponse = new ApiResponse<>();
+
+        try {
+            // Check if the book is already exists or not
+            Book book = bookRepositories.findById(bookId).orElse(null);
+
+            if (book == null) {
+                apiResponse.setCode("BOOK_NOT_EXIST");
+                apiResponse.setMessage("Book not found");
+                apiResponse.setError(true);
+            } else {
+                book.setTitle(updateBookDto.getTitle());
+                book.setDescription(updateBookDto.getDescription());
+                book.setGenre(updateBookDto.getGenre());
+
+                bookRepositories.save(book);
+
+
+            }
+            return apiResponse;
+        } catch (Exception e) {
+            log.info("Error in updateBookByBookId", e);
+            throw new RuntimeException(e);
+        }
     }
 }
