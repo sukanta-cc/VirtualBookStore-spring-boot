@@ -66,11 +66,17 @@ public class BooksController {
     // Update a book
 
     @PutMapping("/{bookId}")
-    public ResponseEntity<ApiResponse<Book>> putMethodName(
+    public ResponseEntity<ApiResponse<Book>> UpdateBook(
             @PathVariable String bookId,
             @RequestBody UpdateBookDto updateBookDto) {
 
-        return ResponseEntity.ok().build();
+        ApiResponse<Book> apiResponse = bookService.updateBookByBookId(bookId, updateBookDto);
+
+        if (apiResponse.isError()) {
+            return ResponseEntity.badRequest().body(apiResponse);
+        }
+
+        return ResponseEntity.ok().body(apiResponse);
     }
 
     // Delete book from server
