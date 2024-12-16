@@ -16,5 +16,4 @@ public class ApiResponse<T> {
     @JsonProperty(required = true)
     private String message;
     private T data;
-
 }

@@ -31,7 +31,7 @@ public class BookService {
 
             // Check if the same titled book is already existed by this name or not by the
             // same author.
-            Book existingBook = bookRepositories.findByTitle(book.getTitle()).orElse(null);
+            Book existingBook = bookRepositories.findByTitleAndEnabled(book.getTitle(), true).orElse(null);
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             User currentUser = (User) auth.getPrincipal();
 
@@ -111,7 +111,7 @@ public class BookService {
 
         try {
             // Check if the book is already exists or not
-            Book book = bookRepositories.findById(bookId).orElse(null);
+            Book book = bookRepositories.findByIdAndEnabled(bookId).orElse(null);
 
             if (book == null) {
                 apiResponse.setCode("BOOK_NOT_EXIST");
@@ -124,7 +124,10 @@ public class BookService {
 
                 bookRepositories.save(book);
 
-
+                apiResponse.setCode("BOOK_UPDATED_SUCCESSFULLY");
+                apiResponse.setMessage("Book updated successfully");
+                apiResponse.setError(false);
+                apiResponse.setData(book);
             }
             return apiResponse;
         } catch (Exception e) {
@@ -132,4 +135,34 @@ public class BookService {
             throw new RuntimeException(e);
         }
     }
+
+    // Soft delete book
+    public ApiResponse<Book> deleteBook(String bookId) {
+        ApiResponse<Book> apiResponse = new ApiResponse<>();
+
+        try {
+            // Check if the book is already exists or not
+            Book book = bookRepositories.findByIdAndEnabled(bookId, true).orElse(null);
+
+            if (book == null) {
+                apiResponse.setCode("BOOK_NOT_EXIST");
+                apiResponse.setMessage("Book not found");
+                apiResponse.setError(true);
+            } else {
+                log.info(book.toString(), "Book details");
+                book.setEnabled(false);
+                bookRepositories.save(book);
+
+                apiResponse.setCode("BOOK_UPDATED_SUCCESSFULLY");
+                apiResponse.setMessage("Book updated successfully");
+                apiResponse.setError(false);
+                apiResponse.setData(book);
+            }
+            return apiResponse;
+        } catch (Exception e) {
+            log.info("Error in delete book", e);
+            throw new RuntimeException(e);
+        }
+    }
+
 }

@@ -2,6 +2,7 @@ package com.virtualbookstore.VirtualBookStore.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -80,6 +81,17 @@ public class BooksController {
     }
 
     // Delete book from server
+
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity<ApiResponse<Book>> DeleteBook(@PathVariable String bookId) {
+        ApiResponse<Book> apiResponse = bookService.deleteBook(bookId);
+
+        if (apiResponse.isError()) {
+            return ResponseEntity.badRequest().body(apiResponse);
+        }
+
+        return ResponseEntity.ok().body(apiResponse);
+    }
 
     // Delete book permanently
 
